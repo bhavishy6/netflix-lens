@@ -1,0 +1,24 @@
+{
+
+    "manifest_version": 2,
+    "name": "Netflix-Lens",
+    "version": "1.0",
+  
+    "description": "Provides an insight to references topics in a Netflix episode or movie",
+  
+    "icons": {
+      "48": "icons/border-48.png"
+    },
+  
+    "content_scripts": [
+      {
+        "matches": ["https://www.netflix.com/watch/*"],
+        "js": ["netflix-lens.js"]
+      }
+    ],
+
+    "background": {
+      "scripts": ["compromise.min.js", "background.js"]
+    }
+  
+  }
