@@ -1,5 +1,6 @@
 let portFromCS;
 
+
 function connected(p) {
   portFromCS = p;
 
@@ -16,7 +17,6 @@ function connected(p) {
     //https://observablehq.com/@spencermountain/topics-named-entity-recognition
     //https://observablehq.com/@spencermountain/compromise-match-syntax
     //https://observablehq.com/@spencermountain/compromise-match
-
     portFromCS.postMessage({
       sub: subs,
       topics: topics,
@@ -29,9 +29,5 @@ function connected(p) {
   });
 }
 
+
 browser.runtime.onConnect.addListener(connected);
-
-
-function searchFandom(){
-  
-}

@@ -13,6 +13,8 @@ var activated;
 var mo;
 var myPort;
 
+var sTitle = "";
+
 
 createButton();
 
@@ -40,7 +42,7 @@ function toggleLens() {
     var name = "";
     name = String(title.childNodes[0].innerHTML);
     console.log('name of title: ' + name);
-
+    sTitle = name;
     console.log("clicked");
     if(activated == false) {
 
@@ -50,12 +52,13 @@ function toggleLens() {
         overlay.style.position = 'fixed';
         overlay.style.zIndex = 1000;
         overlay.style.right = 0;
-        overlay.style.top = 0;
-        overlay.style.bottom = 0;
+        overlay.style.top = "30%";
+        overlay.style.bottom = '30%';
         overlay.style.width = '300px';
-        overlay.style.backgroundColor = 'white';
+        overlay.style.backgroundColor = 'rgba( 3, 213, 226 , 0.5)';
         overlay.style.overflow = 'auto';
         overlay.style.color = '#000';
+        overlay.style.border = '2px solid black';
         
         var organizationDiv = createTopicSubSection("organizations");
         var peopleDiv = createTopicSubSection("people");
@@ -103,14 +106,21 @@ function findWOI(subs) {
     myPort.postMessage({sub: String(subs)});
 }
 
+function createFandomURL(topic) {
+    console.log("reated url");
+    return "https://" + sTitle.replace(" ", "") +".fandom.com/api/v1/Search/List?query=" + topic.replace(" ", "+") + "&limit=25&minArticleQuality=10&batch=1&namespaces=0%2C14";
+}
 
-function addTopic(topic, category) {
+
+function addTopic(topic, category, link) {
+    var link = document.createElement('a');
+    link.href = link;
     var item = document.createElement('div');
     item.textContent = String(topic);
     item.style.whiteSpace = 'nowrap';
     item.style.padding = '10px 5px';
-
-    document.getElementById(category+"-section").appendChild(item);
+    link.appendChild(item);
+    document.getElementById(category+"-section").appendChild(link);
 }
 
 function removeAllChildNodes(category) {
@@ -160,7 +170,7 @@ function startMessaging() {
     
     myPort = browser.runtime.connect({name:"port-from-cs"});
     myPort.onMessage.addListener(function(m) {
-    //   console.log("In content script, received message from background script: ");
+    //console.log("In content script, received message from background script: ");
     console.log("Found Topics: " +m.topics);
 
         if(m.topics.length > 0) {
@@ -190,6 +200,9 @@ function startMessaging() {
 
                 if(!allPeople.includes(person)) {
                     allPeople.push(person);
+                    
+                    
+
                     addTopic(person, "people");
 
                     if(allPeople.length > 20) {
@@ -224,7 +237,17 @@ function startMessaging() {
 
                 if(!allCapitals.includes(capital)) {
                     allCapitals.push(capital);
-                    addTopic(capital, "possible");
+
+                    var link = "";
+                    var fanURL = createFandomURL(capital);
+
+                    console.log(fanURL);
+
+                    window.fetch(url)
+                    .then(response => response.json())
+                    .then(data => { console.log(data); link = data.items[0]; });
+
+                    addTopic(capital, "possible", link);
 
                     if(allCapitals.length > 6) {
                         //if more than 20 inside array, remove all old ones.

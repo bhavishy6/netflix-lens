@@ -19,6 +19,10 @@
 
     "background": {
       "scripts": ["compromise.min.js", "background.js"]
-    }
+    },
+    "permissions": [
+      "https://*.fandom.com/*",
+      "webRequest"
+    ]
   
   }
